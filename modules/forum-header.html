@@ -1,0 +1,44 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+
+<dom-module id="forum-header">
+	<template>
+		<style>
+			h3 {
+				margin: 0;
+				font-size: 2rem;
+			}
+		</style>
+
+		<div>
+			<h3>
+				[[name]]
+			</h3>
+		</div>
+	</template>
+
+	<script>
+		(function FHeader(customElements){
+			class ForumHeader extends Polymer.Element {
+				static get is(){return 'forum-header';}
+
+				static get properties(){
+					return {
+						name:{
+							type:String,
+							value:"Sin titulo",
+							notify:true,
+							observer:'_headerComponentChanged'
+						}
+					}
+				}
+
+				_headerComponentChanged(){
+					console.log('my header has changed ...')
+				}
+			}
+
+			customElements.define(ForumHeader.is,ForumHeader);
+		})(window.customElements);
+	</script>
+</dom-module>

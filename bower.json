@@ -2,10 +2,11 @@
   "name": "Polymer forum challenge",
   "private": true,
   "dependencies": {
-    "polymer": "#2.0.2",
+    "Polymer/polymer": "#2.0.2",
     "paper-item": "^2.0.0",
     "paper-input": "^2.0.1",
     "paper-dialog": "^2.0.0",
-    "paper-button": "^2.0.0"
+    "paper-button": "^2.0.0",
+    "paper-card": "PolymerElements/paper-card#^2.0.0"
   }
 }

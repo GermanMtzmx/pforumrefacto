@@ -1,0 +1,66 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<dom-module id="forum-answers">
+	
+	<template>
+		<style>
+			h5 {
+				color:var(--no-questions,red);
+			}
+		</style>
+		<h4>Pregunta : [[forum.question]]</h4>
+		
+		<template is="dom-if" if=[[noAnswers]]>
+			<h5>No hay respuestas para esta pregunta</h5>
+		</template>
+
+		<template is="dom-repeat" items="[[forum.answers]]" as="answer">
+			<paper-card heading="[[answer]]" class="lime"></paper-card>
+		</template>
+	</template>
+
+
+	<script>
+		(function AnswerIIFE(customElements){
+			'use strict';
+
+			class ForumAnswers extends Polymer.Element {
+				static get is() {return 'forum-answers';}
+
+				static get properties() {
+					return {
+						forum:{
+							type:Object,
+							notify:true,
+							observer:'_objectChanged'
+						},
+
+						noAnswers:{
+							type:Boolean,
+							value:true,
+							notify:true,
+						}
+
+
+					}
+				}
+
+				_objectChanged() {
+					console.log("forum answers obj changed")
+
+					if(this.forum.hasOwnProperty('answers') && this.forum.answers.length > 0){
+						this.noAnswers = false
+					}else {
+						this.noAnswers = true
+					}
+
+				}
+			}
+
+			customElements.define(ForumAnswers.is,ForumAnswers)
+
+		})(window.customElements);
+	</script>
+</dom-module>

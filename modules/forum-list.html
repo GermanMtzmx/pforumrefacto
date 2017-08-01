@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<dom-module id="forum-list">
+	<template>
+		<style>
+			.clickable {
+				cursor: pointer;
+			}
+		</style>
+
+		<div role="listbox">
+		
+			<template is="dom-repeat" items="[[forums]]" as="forum">
+				<paper-item class="clickable" index[[index]]>
+					[[forum.name]]
+				</paper-item>
+				
+			</template>
+			
+		</div>
+		
+	</template>
+
+	<script>
+		(function ItemListIIFE(customElements){
+			class ForumList extends Polymer.Element {
+				static get is() {return 'forum-list';}
+
+				static get properties(){
+					return {
+						forums: {
+							type:Array,
+							notify:true,
+							value:[],
+							observer:'_forumListChanged'
+						},
+
+						index:{
+							type:Number,
+							notify:true,
+							value:0
+						}
+					}
+				}
+
+				_forumListChanged(){
+					console.log('forum list changed')
+				}
+			}
+
+			customElements.define(ForumList.is,ForumList);
+		})(window.customElements);
+	</script>
+</dom-module>

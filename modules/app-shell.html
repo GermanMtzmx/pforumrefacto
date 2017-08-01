@@ -1,0 +1,66 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="forum-list.html">
+<link rel="import" href="forum-header.html">
+<link rel="import" href="forum-answers.html">
+
+<dom-module id="app-shell">
+	<template>
+
+		<div>
+			<p>header goes here</p>
+			<forum-header name="[[name]]" ></forum-header>
+		</div>
+		<div>
+			<p>forum list</p>
+			<forum-list forums="[[forums]]"></forum-list>
+		</div>
+
+		<div>
+			<p>Im all the answers</p>
+			<forum-answers forum="[[forum]]"></forum-answers>
+
+		</div>
+		<h1>Im app shell nigga</h1>
+	</template>
+
+	<script>
+		(function AppShellIIFE(customElements){
+			'use strict';
+			class AppShell extends Polymer.Element {
+				
+				static get is(){return 'app-shell';}
+
+				static get properties() {
+					return {
+
+						forums:{
+							type:Array,
+							value:[{name:"Forum de prueba",question:"pregunta de prueba",answers:['respuesta uno','respuesta dos']}],
+							observer:'_forumsChanged'
+						},
+
+						name:{
+							type:String,
+
+						},
+
+						forum:{
+							type:Object
+						}
+					}
+				}
+
+				ready() {
+					super.ready();
+					this.name = this.forums[0].name;
+					this.forum = this.forums[0];
+				}
+
+				_forumsChanged(){
+					console.log("forums changed ....")
+				}
+			}
+			customElements.define(AppShell.is,AppShell);
+		})(window.customElements);
+	</script>
+</dom-module>
