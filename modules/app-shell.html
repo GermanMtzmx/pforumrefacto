@@ -107,8 +107,7 @@
 							type:Array,
 							value:[{name:"Forum de prueba",question:"pregunta de prueba",answers:['respuesta uno','respuesta dos']}],
 							observer:'_forumsChanged',
-							readOnly:false,
-							reflectToAttribute:true
+
 						},
 
 						name:{
@@ -125,8 +124,16 @@
 						indexSelected:{
 							type:Number,
 							value:0,
+							observer:'_indexChanged'
 						}
 					}
+				}
+
+				_indexChanged(){
+					console.log('index selected changed',this.indexSelected)
+					console.log('forum should be',this.forums[this.indexSelected])
+					this.forum = this.get(['forums',this.indexSelected])
+					console.log("dddd",this.forum)
 				}
 
 
@@ -137,15 +144,23 @@
 
 					//catch new forum added
 					this.addEventListener('on-forum-add',(e)=> {
-						this.push('forums',e.detail)});
+						console.log(e.detail);
+						this.push('forums',e.detail);
+						this.notifyPath('forums')
+						console.log('forums is ',this.forums)
+					});
 
 					//catch forum selected
 
 					this.addEventListener('on-forum-select',(event)=>{
-						console.log(event.detail.index);
-						this.name = this.forums[event.detail.index].name;
-						this.set('forum',this.forums[event.detail.index]);
-						this.set('indexSelected',event.detail.index);
+						this.indexSelected = event.detail.index
+						// console.log('n select',event.detail.index);
+						// console.log(this.get(`forums.${event.detail.index}`))
+
+						// this.set('indexSelected',event.detail.index);
+						// this.name = this.forums[event.detail.index].name;
+						// this.forum = this.forums[event.detail.index];
+						// this.notifyPath('forum')
 					});
 
 					//catch answer

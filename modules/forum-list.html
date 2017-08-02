@@ -12,9 +12,9 @@
 
 		<div role="listbox">
 		
-			<template is="dom-repeat" items="[[forums]]" as="forum">
+			<template is="dom-repeat" items="{{forums}}" as="forum">
 				<paper-item class="clickable" on-tap="_selectForum" index="[[index]]">
-					[[forum.name]]
+					[[index]][[forum.name]]
 				</paper-item>
 				
 			</template>
@@ -37,23 +37,35 @@
 							observer:'_forumListChanged'
 						},
 
-						index:{
+						idx:{
 							type:Number,
 							notify:true,
 							value:0
-						}
+						},
+
+						selected:{
+							type:Object
+
+						}	
 					}
 				}
 
 				_forumListChanged(){
 					console.log('forum list changed')
+					this.notifyPath('forums');
+
 				}
 
 				_selectForum(event){
+					
+					
+
+					this.selected = this.forums[event.currentTarget.index]
+					
+					console.log(this.forums[Number(event.currentTarget.index)])
 
 					this.dispatchEvent(new CustomEvent('on-forum-select',{bubbles:true,composed:true,detail:{
 						index:event.currentTarget.index}}));
-
 				}
 			}
 

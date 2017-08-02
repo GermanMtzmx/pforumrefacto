@@ -26,9 +26,9 @@
 		<!-- Dialog -->
 		<paper-dialog id="dialog">
 			<h2>Agrega un foro</h2>
-			<paper-input value="{{newForum.name}}" label="Nombre"></paper-input>
+			<paper-input value="{{name}}" label="Nombre"></paper-input>
 
-			<paper-input value="{{newForum.question}}" label="Pregunta"></paper-input>
+			<paper-input value="{{question}}" label="Pregunta"></paper-input>
 
 			<div class="buttons">
 				<paper-button dialog-dismiss>Cancelar</paper-button>
@@ -48,23 +48,21 @@
 
 				static get properties(){
 					return {
-						newForum:{
-							type:Object,
-							notify:true,
-							value:{
-								name:'',
-								question:'',
-								answers:[]
-							}
-
+						name:{
+							type:String,
+							value:''
+						},
+						question:{
+							type:String,
+							value:''
 						}
 
 					}
 				}
 
 				_cleanInputs(){
-					this.set('newForum.name','');
-					this.set('newForum.question','');	
+					this.name  = ''
+					this.question = ''	
 				}
 
 				_openDialog(){
@@ -74,12 +72,10 @@
 
 				_addForum(event){
 					//creates new custom event
-					if(this.newForum.name === '' || this.newForum.question === ''){
-						return false;
-					}
+
 
 					this.dispatchEvent(new CustomEvent('on-forum-add',{
-						bubbles:true,composed:true,detail:this.newForum
+						bubbles:true,composed:true,detail:{name:this.name,question:this.question,answers:[]}
 					}));
 					//clean obj
 					
