@@ -1,0 +1,93 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+
+<dom-module id="forum-modal">
+
+
+
+	<template>
+		<!-- styles -->
+		<style is="custom-style">
+			paper-button.custom {
+				color:#FFF;
+			}
+
+			paper-button.indigo {
+				background-color: #3F51B5;
+			}
+		</style>
+
+		<!-- button -->
+		<paper-button class="custom indigo" raised on-tap="_openDialog">Nuevo foro</paper-button>
+		<!-- end button -->
+
+		<!-- Dialog -->
+		<paper-dialog id="dialog">
+			<h2>Agrega un foro</h2>
+			<paper-input value="{{newForum.name}}" label="Nombre"></paper-input>
+
+			<paper-input value="{{newForum.question}}" label="Pregunta"></paper-input>
+
+			<div class="buttons">
+				<paper-button dialog-dismiss>Cancelar</paper-button>
+				<paper-button dialog-confirm autofocus on-tap="_addForum">Aceptar</paper-button>
+			</div>
+			
+		</paper-dialog>
+		<!-- end dialog -->
+	</template>
+
+
+	<script>
+		(function IIFEDialog(customElements){
+			'use strict';
+			class ForumModal extends Polymer.Element {
+				static get is(){return 'forum-modal';}
+
+				static get properties(){
+					return {
+						newForum:{
+							type:Object,
+							notify:true,
+							value:{
+								name:'',
+								question:'',
+								answers:[]
+							}
+
+						}
+
+					}
+				}
+
+				_cleanInputs(){
+					this.set('newForum.name','');
+					this.set('newForum.question','');	
+				}
+
+				_openDialog(){
+					this._cleanInputs();
+					this.$.dialog.open();
+				}
+
+				_addForum(event){
+					//creates new custom event
+					if(this.newForum.name === '' || this.newForum.question === ''){
+						return false;
+					}
+
+					this.dispatchEvent(new CustomEvent('on-forum-add',{
+						bubbles:true,composed:true,detail:this.newForum
+					}));
+					//clean obj
+					
+				}
+
+			}
+			customElements.define(ForumModal.is,ForumModal);
+		})(window.customElements);
+	</script>
+	
+</dom-module>

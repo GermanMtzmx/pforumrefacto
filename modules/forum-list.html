@@ -13,7 +13,7 @@
 		<div role="listbox">
 		
 			<template is="dom-repeat" items="[[forums]]" as="forum">
-				<paper-item class="clickable" index[[index]]>
+				<paper-item class="clickable" on-tap="_selectForum" index="[[index]]">
 					[[forum.name]]
 				</paper-item>
 				
@@ -47,6 +47,13 @@
 
 				_forumListChanged(){
 					console.log('forum list changed')
+				}
+
+				_selectForum(event){
+
+					this.dispatchEvent(new CustomEvent('on-forum-select',{bubbles:true,composed:true,detail:{
+						index:event.currentTarget.index}}));
+
 				}
 			}
 

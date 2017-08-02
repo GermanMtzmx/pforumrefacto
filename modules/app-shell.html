@@ -2,25 +2,95 @@
 <link rel="import" href="forum-list.html">
 <link rel="import" href="forum-header.html">
 <link rel="import" href="forum-answers.html">
+<link rel="import" href="forum-answer.html">
+<link rel="import" href="forum-modal.html">
 
 <dom-module id="app-shell">
 	<template>
+		<style>
+			:host{
+				width: 100%;
+				height: 100%;
+				font-size: 16px;
+			}
 
-		<div>
-			<p>header goes here</p>
-			<forum-header name="[[name]]" ></forum-header>
-		</div>
-		<div>
-			<p>forum list</p>
-			<forum-list forums="[[forums]]"></forum-list>
-		</div>
+			.container {
+			    display: flex;
+			    flex-wrap: wrap;
+			}
 
-		<div>
-			<p>Im all the answers</p>
-			<forum-answers forum="[[forum]]"></forum-answers>
+			.add-forum {
+				height: 60px;
+				align-self: auto;
+				width: 20%;
+				border-bottom: 1px solid #424242;
 
-		</div>
-		<h1>Im app shell nigga</h1>
+			}
+
+			.header-forum {
+
+				height: 60px;
+				align-self: auto;
+				width: 80%;
+				border-bottom: 1px solid #424242;
+
+	
+			}
+
+			.forum-list {
+				flex:1;
+				border:1px solid green;
+				min-height: 250px;
+			}
+
+			.forum-sub-container {
+				width: 80%;
+				border:1px solid yellow;
+				position: relative;
+			}
+
+			.forum-answers {
+				flex:0 0 100%;
+				margin: 10px 0;
+				border: 3px solid black;
+			}
+
+			.forum-response {
+				flex: 0 0 100%;
+				margin: 10px 0;
+	
+				bottom: 0;
+				width: 98%;
+			}
+
+		</style>
+
+
+		<div class="container">
+
+			<div class="add-forum">
+				<forum-modal></forum-modal>
+			</div>
+
+			<div class="header-forum">
+				<forum-header name="[[name]]" ></forum-header>
+			</div>
+
+			<div class="forum-list">
+				<forum-list forums="[[forums]]"></forum-list>
+			</div>
+
+			<div class="forum-sub-container">
+				<div class="forum-answers">
+					<forum-answers forum="[[forum]]"></forum-answers>
+				</div>
+
+				<div class="forum-response">
+					<forum-answer index="[[indexSelected]]"></forum-answer>
+				</div>
+			</div>
+		</div>		
+		
 	</template>
 
 	<script>
@@ -36,7 +106,9 @@
 						forums:{
 							type:Array,
 							value:[{name:"Forum de prueba",question:"pregunta de prueba",answers:['respuesta uno','respuesta dos']}],
-							observer:'_forumsChanged'
+							observer:'_forumsChanged',
+							readOnly:false,
+							reflectToAttribute:true
 						},
 
 						name:{
@@ -45,19 +117,48 @@
 						},
 
 						forum:{
-							type:Object
+							type:Object,
+							reflectToAttribute:true,
+
+						},
+
+						indexSelected:{
+							type:Number,
+							value:0,
 						}
 					}
 				}
 
-				ready() {
-					super.ready();
+
+				connectedCallback(){
+					super.connectedCallback();
 					this.name = this.forums[0].name;
 					this.forum = this.forums[0];
+
+					//catch new forum added
+					this.addEventListener('on-forum-add',(e)=> {
+						this.push('forums',e.detail)});
+
+					//catch forum selected
+
+					this.addEventListener('on-forum-select',(event)=>{
+						console.log(event.detail.index);
+						this.name = this.forums[event.detail.index].name;
+						this.set('forum',this.forums[event.detail.index]);
+						this.set('indexSelected',event.detail.index);
+					});
+
+					//catch answer
+					this.addEventListener('on-answered',(event)=>{
+						this.forum = this.forums[event.detail.index];
+						this.push('forum.answers',event.detail.answer);
+						this.indexSelected = event.detail.index;
+
+					});
 				}
 
 				_forumsChanged(){
-					console.log("forums changed ....")
+					console.log("forums changed ....");
 				}
 			}
 			customElements.define(AppShell.is,AppShell);

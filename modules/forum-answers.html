@@ -12,12 +12,13 @@
 		</style>
 		<h4>Pregunta : [[forum.question]]</h4>
 		
-		<template is="dom-if" if=[[noAnswers]]>
+		<template is="dom-if" if={{noAnswers}}>
 			<h5>No hay respuestas para esta pregunta</h5>
 		</template>
 
-		<template is="dom-repeat" items="[[forum.answers]]" as="answer">
-			<paper-card heading="[[answer]]" class="lime"></paper-card>
+		<template is="dom-repeat" items="{{forum.answers}}" as="answer">
+			<!-- <paper-card heading="[[answer]]"></paper-card> -->
+			<p>[[answer]]</p>
 		</template>
 	</template>
 
@@ -52,7 +53,7 @@
 
 					if(this.forum.hasOwnProperty('answers') && this.forum.answers.length > 0){
 						this.noAnswers = false
-					}else {
+					} else {
 						this.noAnswers = true
 					}
 

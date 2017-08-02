@@ -1,2 +1,69 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
 
+
+<dom-module id="forum-answer">
+	<template>
+
+		<style is="custom-style">
+		  paper-button.custom {
+		    color:#FFF;
+		  }
+		  paper-button.green {
+		    background-color: #4CAF50;
+		  }
+		</style>
+
+
+		<paper-input value="{{answer}}" placeholder="Escribe tu respuesta papu"></paper-input>
+
+		<paper-button class="custom green" on-tap="_sendAnswer">
+			Enviar
+		</paper-button>
+	</template>
+
+	<script>
+		(function SendAnswer(customElements){
+			'use strict';
+			class ForumAnswer extends Polymer.Element {
+				static get is(){return 'forum-answer';}
+
+				static get properties() {
+					return {
+						index:{
+							type:Number,
+							value:0,
+							notify:true
+						},
+
+						answer:{
+							type:String,
+							value:'',
+							notify:true
+						}
+					}
+				}
+
+
+
+				_sendAnswer() {
+
+					if(this.answer == ''){
+						return false;
+					}
+
+					this.dispatchEvent(new CustomEvent('on-answered',{
+						bubbles:true,composed:true,detail:{
+							index:this.index,
+							answer:this.answer
+						}
+					}))
+					console.log('index is: ',this.index,' asnwer to send is',this.answer);
+					this.answer = '';
+				}
+			}
+			customElements.define(ForumAnswer.is,ForumAnswer);
+		})(window.customElements);
+	</script>
+</dom-module>
